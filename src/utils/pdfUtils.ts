@@ -1,4 +1,5 @@
-import { PDFDocument, rgb, PageSizes, degrees } from 'pdf-lib';
+
+import { PDFDocument, rgb, PageSizes, degrees, StandardFonts } from 'pdf-lib';
 import { saveAs } from 'file-saver';
 
 export class PDFUtils {

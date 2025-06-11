@@ -1,0 +1,560 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Tools Suite - 50+ मुफ्त PDF टूल्स</title>
+    <meta name="description" content="50+ मुफ्त PDF टूल्स - PDF कन्वर्ट, मर्ज, स्प्लिट, कंप्रेस और अधिक। ऑनलाइन PDF एडिटर और कन्वर्टर टूल्स।">
+    <meta name="keywords" content="PDF tools, PDF converter, merge PDF, split PDF, compress PDF, हिंदी PDF टूल्स">
+    <meta name="author" content="PDF Tools Suite">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- PDF-lib CDN -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    
+    <!-- FileSaver.js CDN -->
+    <script src="https://unpkg.com/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        .tool-card {
+            transition: all 0.2s ease;
+        }
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+        }
+        .hidden { display: none; }
+        .loading {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100">
+    <!-- AdSense Space - Top -->
+    <div class="w-full h-20 bg-gray-100 border-b flex items-center justify-center text-gray-500">
+        <div class="text-center">
+            <p class="text-sm">AdSense Advertisement Space - 728 x 90</p>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div class="text-center mb-8">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">PDF Tools Suite</h1>
+                    <p class="text-xl text-gray-600">Complete PDF solution with 50+ professional tools</p>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="max-w-md mx-auto">
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="Search PDF tools..." 
+                               class="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Home Page -->
+        <main id="homePage" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" id="toolsGrid">
+                <!-- Tools will be populated by JavaScript -->
+            </div>
+        </main>
+
+        <!-- Tool Page Template -->
+        <div id="toolPage" class="hidden max-w-4xl mx-auto px-4 py-8">
+            <!-- Back Button -->
+            <button onclick="showHomePage()" class="mb-4 flex items-center text-blue-600 hover:text-blue-800">
+                <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                वापस होम पर जाएं
+            </button>
+
+            <!-- Tool Header -->
+            <div class="mb-8">
+                <h1 id="toolTitle" class="text-3xl font-bold text-gray-900 mb-2"></h1>
+                <p id="toolDescription" class="text-gray-600"></p>
+            </div>
+
+            <!-- Tool Interface -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Upload Section -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        फ़ाइल अपलोड करें
+                    </h3>
+                    <div id="dropZone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors">
+                        <svg class="h-12 w-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        <p class="text-gray-600 mb-2">फ़ाइलों को यहाँ खींचें और छोड़ें</p>
+                        <p class="text-sm text-gray-500 mb-4">या</p>
+                        <input type="file" id="fileInput" class="hidden" multiple>
+                        <button onclick="document.getElementById('fileInput').click()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            फ़ाइल चुनें
+                        </button>
+                        <p id="acceptedFiles" class="text-xs text-gray-500 mt-2"></p>
+                    </div>
+                    <div id="filesList" class="mt-4 space-y-2"></div>
+                </div>
+
+                <!-- Process Section -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        प्रोसेसिंग
+                    </h3>
+                    <div id="toolOptions" class="space-y-4 mb-4">
+                        <!-- Tool specific options will be added here -->
+                    </div>
+                    <button id="processBtn" onclick="processFiles()" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 disabled:bg-gray-400" disabled>
+                        कन्वर्ट करें
+                    </button>
+                    <div id="processStatus" class="mt-4 hidden">
+                        <div class="flex items-center justify-center">
+                            <div class="loading mr-2"></div>
+                            <span>प्रोसेसिंग...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AdSense Space - Bottom -->
+    <div class="w-full h-20 bg-gray-100 border-t flex items-center justify-center text-gray-500 mt-8">
+        <div class="text-center">
+            <p class="text-sm">AdSense Advertisement Space - 728 x 90</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2024 PDF Tools Suite. सभी अधिकार सुरक्षित।</p>
+        </div>
+    </footer>
+
+    <script>
+        // PDF Tools Data
+        const pdfTools = [
+            { id: 1, name: 'Word to PDF', route: 'word-to-pdf', description: 'Convert Word documents to PDF', accept: '.doc,.docx' },
+            { id: 2, name: 'Excel to PDF', route: 'excel-to-pdf', description: 'Convert Excel files to PDF', accept: '.xls,.xlsx' },
+            { id: 3, name: 'PowerPoint to PDF', route: 'ppt-to-pdf', description: 'Convert PPT presentations to PDF', accept: '.ppt,.pptx' },
+            { id: 4, name: 'JPG to PDF', route: 'jpg-to-pdf', description: 'Convert JPG images to PDF', accept: '.jpg,.jpeg' },
+            { id: 5, name: 'PNG to PDF', route: 'png-to-pdf', description: 'Convert PNG images to PDF', accept: '.png' },
+            { id: 6, name: 'HTML to PDF', route: 'html-to-pdf', description: 'Convert HTML pages to PDF', accept: '.html' },
+            { id: 7, name: 'Text to PDF', route: 'text-to-pdf', description: 'Convert text files to PDF', accept: '.txt' },
+            { id: 8, name: 'PDF to Word', route: 'pdf-to-word', description: 'Convert PDF to Word document', accept: '.pdf' },
+            { id: 9, name: 'PDF to Excel', route: 'pdf-to-excel', description: 'Convert PDF to Excel spreadsheet', accept: '.pdf' },
+            { id: 10, name: 'PDF to PPT', route: 'pdf-to-ppt', description: 'Convert PDF to PowerPoint', accept: '.pdf' },
+            { id: 11, name: 'PDF to JPG', route: 'pdf-to-jpg', description: 'Convert PDF pages to JPG images', accept: '.pdf' },
+            { id: 12, name: 'PDF to PNG', route: 'pdf-to-png', description: 'Convert PDF pages to PNG images', accept: '.pdf' },
+            { id: 13, name: 'Split PDF', route: 'split-pdf', description: 'Split PDF into multiple files', accept: '.pdf' },
+            { id: 14, name: 'Merge PDF', route: 'merge-pdf', description: 'Merge multiple PDFs into one', accept: '.pdf' },
+            { id: 15, name: 'Compress PDF', route: 'compress-pdf', description: 'Reduce PDF file size', accept: '.pdf' },
+            { id: 16, name: 'Unlock PDF', route: 'unlock-pdf', description: 'Remove password from PDF', accept: '.pdf' },
+            { id: 17, name: 'Protect PDF', route: 'protect-pdf', description: 'Add password to PDF', accept: '.pdf' },
+            { id: 18, name: 'Rotate PDF', route: 'rotate-pdf', description: 'Rotate PDF pages', accept: '.pdf' },
+            { id: 19, name: 'Add Watermark', route: 'add-watermark', description: 'Add watermark to PDF', accept: '.pdf' },
+            { id: 20, name: 'Add Page Numbers', route: 'add-page-numbers', description: 'Add page numbers to PDF', accept: '.pdf' },
+            { id: 21, name: 'Rearrange Pages', route: 'rearrange-pages', description: 'Reorder PDF pages', accept: '.pdf' },
+            { id: 22, name: 'Extract Images', route: 'extract-images', description: 'Extract images from PDF', accept: '.pdf' },
+            { id: 23, name: 'Extract Text', route: 'extract-text', description: 'Extract text from PDF', accept: '.pdf' },
+            { id: 24, name: 'PDF Form Filler', route: 'pdf-form-filler', description: 'Fill PDF forms', accept: '.pdf' },
+            { id: 25, name: 'PDF Validator', route: 'pdf-validator', description: 'Validate PDF files', accept: '.pdf' },
+            { id: 26, name: 'OCR PDF', route: 'ocr-pdf', description: 'OCR scan to searchable PDF', accept: '.pdf' },
+            { id: 27, name: 'PDF Page Counter', route: 'page-counter', description: 'Count PDF pages', accept: '.pdf' },
+            { id: 28, name: 'Remove Pages', route: 'remove-pages', description: 'Delete specific pages', accept: '.pdf' },
+            { id: 29, name: 'Add Pages', route: 'add-pages', description: 'Insert blank pages', accept: '.pdf' },
+            { id: 30, name: 'PDF Info', route: 'pdf-info', description: 'View PDF information', accept: '.pdf' },
+            { id: 31, name: 'Sign PDF', route: 'sign-pdf', description: 'Add digital signature', accept: '.pdf' },
+            { id: 32, name: 'Markdown to PDF', route: 'markdown-to-pdf', description: 'Convert Markdown to PDF', accept: '.md' },
+            { id: 33, name: 'Email to PDF', route: 'email-to-pdf', description: 'Convert emails to PDF', accept: '.eml' },
+            { id: 34, name: 'CSV to PDF', route: 'csv-to-pdf', description: 'Convert CSV files to PDF', accept: '.csv' },
+            { id: 35, name: 'Crop PDF', route: 'crop-pdf', description: 'Crop PDF pages', accept: '.pdf' },
+            { id: 36, name: 'Remove Background', route: 'remove-background', description: 'Remove PDF background', accept: '.pdf' },
+            { id: 37, name: 'Edit Metadata', route: 'edit-metadata', description: 'Edit PDF metadata', accept: '.pdf' },
+            { id: 38, name: 'Annotate PDF', route: 'annotate-pdf', description: 'Add annotations to PDF', accept: '.pdf' },
+            { id: 39, name: 'PDF Editor', route: 'pdf-editor', description: 'Basic PDF editing', accept: '.pdf' },
+            { id: 40, name: 'Redact PDF', route: 'redact-pdf', description: 'Redact sensitive content', accept: '.pdf' },
+            { id: 41, name: 'PDF Reader', route: 'pdf-reader', description: 'View PDF files online', accept: '.pdf' },
+            { id: 42, name: 'Merge Images', route: 'merge-images-pdf', description: 'Merge images into PDF', accept: '.jpg,.jpeg,.png' },
+            { id: 43, name: 'Delete Pages', route: 'delete-pages', description: 'Remove PDF pages', accept: '.pdf' },
+            { id: 44, name: 'Edit Bookmarks', route: 'edit-bookmarks', description: 'Manage PDF bookmarks', accept: '.pdf' },
+            { id: 45, name: 'Fill Forms', route: 'fill-forms', description: 'Fill PDF forms online', accept: '.pdf' },
+            { id: 46, name: 'PDF to SVG', route: 'pdf-to-svg', description: 'Convert PDF pages to SVG', accept: '.pdf' },
+            { id: 47, name: 'URL to PDF', route: 'url-to-pdf', description: 'Convert web pages to PDF', accept: 'url' },
+            { id: 48, name: 'Batch Convert', route: 'batch-convert', description: 'Batch convert files', accept: '*' },
+            { id: 49, name: 'Compare PDFs', route: 'compare-pdfs', description: 'Compare two PDF files', accept: '.pdf' },
+            { id: 50, name: 'Translate PDF', route: 'translate-pdf', description: 'Translate PDF content', accept: '.pdf' }
+        ];
+
+        let currentTool = null;
+        let uploadedFiles = [];
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            renderToolsGrid();
+            setupSearch();
+            setupFileUpload();
+        });
+
+        // Render tools grid
+        function renderToolsGrid() {
+            const grid = document.getElementById('toolsGrid');
+            grid.innerHTML = '';
+
+            pdfTools.forEach(tool => {
+                const toolCard = document.createElement('div');
+                toolCard.className = 'tool-card bg-white rounded-lg shadow p-6 text-center cursor-pointer';
+                toolCard.onclick = () => showToolPage(tool);
+                
+                toolCard.innerHTML = `
+                    <div class="mb-4">
+                        <svg class="h-12 w-12 mx-auto text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">${tool.name}</h3>
+                    <p class="text-sm text-gray-600">${tool.description}</p>
+                `;
+                
+                grid.appendChild(toolCard);
+            });
+        }
+
+        // Setup search functionality
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const filteredTools = pdfTools.filter(tool => 
+                    tool.name.toLowerCase().includes(searchTerm) ||
+                    tool.description.toLowerCase().includes(searchTerm)
+                );
+                
+                const grid = document.getElementById('toolsGrid');
+                grid.innerHTML = '';
+                
+                filteredTools.forEach(tool => {
+                    const toolCard = document.createElement('div');
+                    toolCard.className = 'tool-card bg-white rounded-lg shadow p-6 text-center cursor-pointer';
+                    toolCard.onclick = () => showToolPage(tool);
+                    
+                    toolCard.innerHTML = `
+                        <div class="mb-4">
+                            <svg class="h-12 w-12 mx-auto text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-gray-900 mb-2">${tool.name}</h3>
+                        <p class="text-sm text-gray-600">${tool.description}</p>
+                    `;
+                    
+                    grid.appendChild(toolCard);
+                });
+            });
+        }
+
+        // Show tool page
+        function showToolPage(tool) {
+            currentTool = tool;
+            uploadedFiles = [];
+            
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('toolPage').classList.remove('hidden');
+            
+            document.getElementById('toolTitle').textContent = tool.name;
+            document.getElementById('toolDescription').textContent = tool.description;
+            document.getElementById('acceptedFiles').textContent = `स्वीकृत प्रारूप: ${tool.accept}`;
+            document.getElementById('fileInput').accept = tool.accept;
+            
+            setupToolOptions(tool);
+            updateFilesList();
+            updateProcessButton();
+        }
+
+        // Show home page
+        function showHomePage() {
+            document.getElementById('toolPage').classList.add('hidden');
+            document.getElementById('homePage').classList.remove('hidden');
+            currentTool = null;
+            uploadedFiles = [];
+        }
+
+        // Setup file upload
+        function setupFileUpload() {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+
+            // Drag and drop
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('bg-blue-50', 'border-blue-400');
+            });
+
+            dropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('bg-blue-50', 'border-blue-400');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('bg-blue-50', 'border-blue-400');
+                const files = Array.from(e.dataTransfer.files);
+                addFiles(files);
+            });
+
+            // File input
+            fileInput.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                addFiles(files);
+            });
+        }
+
+        // Add files
+        function addFiles(files) {
+            files.forEach(file => {
+                if (!uploadedFiles.find(f => f.name === file.name)) {
+                    uploadedFiles.push(file);
+                }
+            });
+            updateFilesList();
+            updateProcessButton();
+        }
+
+        // Update files list
+        function updateFilesList() {
+            const filesList = document.getElementById('filesList');
+            filesList.innerHTML = '';
+
+            uploadedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'flex items-center justify-between p-2 bg-gray-50 rounded';
+                fileItem.innerHTML = `
+                    <span class="text-sm truncate">${file.name}</span>
+                    <button onclick="removeFile(${index})" class="text-red-500 hover:text-red-700">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                `;
+                filesList.appendChild(fileItem);
+            });
+        }
+
+        // Remove file
+        function removeFile(index) {
+            uploadedFiles.splice(index, 1);
+            updateFilesList();
+            updateProcessButton();
+        }
+
+        // Update process button
+        function updateProcessButton() {
+            const processBtn = document.getElementById('processBtn');
+            processBtn.disabled = uploadedFiles.length === 0;
+        }
+
+        // Setup tool specific options
+        function setupToolOptions(tool) {
+            const toolOptions = document.getElementById('toolOptions');
+            toolOptions.innerHTML = '';
+
+            // Add specific options based on tool type
+            if (tool.route === 'text-to-pdf') {
+                toolOptions.innerHTML = `
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">टेक्स्ट दर्ज करें:</label>
+                        <textarea id="textInput" class="w-full p-2 border border-gray-300 rounded" rows="6" placeholder="यहाँ अपना टेक्स्ट लिखें..."></textarea>
+                    </div>
+                `;
+            } else if (tool.route === 'rotate-pdf') {
+                toolOptions.innerHTML = `
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">रोटेशन कोण:</label>
+                        <select id="rotationAngle" class="w-full p-2 border border-gray-300 rounded">
+                            <option value="90">90° (दाएं)</option>
+                            <option value="180">180° (उल्टा)</option>
+                            <option value="270">270° (बाएं)</option>
+                        </select>
+                    </div>
+                `;
+            } else if (tool.route === 'add-watermark') {
+                toolOptions.innerHTML = `
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">वॉटरमार्क टेक्स्ट:</label>
+                        <input type="text" id="watermarkText" class="w-full p-2 border border-gray-300 rounded" placeholder="वॉटरमार्क टेक्स्ट दर्ज करें">
+                    </div>
+                `;
+            }
+        }
+
+        // Process files
+        async function processFiles() {
+            if (!currentTool || uploadedFiles.length === 0) return;
+
+            const processBtn = document.getElementById('processBtn');
+            const processStatus = document.getElementById('processStatus');
+            
+            processBtn.disabled = true;
+            processStatus.classList.remove('hidden');
+
+            try {
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate processing
+
+                if (currentTool.route === 'text-to-pdf') {
+                    const text = document.getElementById('textInput').value;
+                    if (text) {
+                        await createPDFFromText(text);
+                    }
+                } else if (currentTool.route === 'merge-pdf') {
+                    await mergePDFs(uploadedFiles);
+                } else if (currentTool.route.includes('to-pdf')) {
+                    await convertImagesToPDF(uploadedFiles);
+                } else if (currentTool.route === 'rotate-pdf') {
+                    const angle = parseInt(document.getElementById('rotationAngle').value);
+                    await rotatePDF(uploadedFiles[0], angle);
+                } else {
+                    // Demo conversion for other tools
+                    await simulateConversion();
+                }
+
+                alert('प्रोसेसिंग पूर्ण! फ़ाइल डाउनलोड हो गई।');
+            } catch (error) {
+                alert('प्रोसेसिंग में त्रुटि: ' + error.message);
+            } finally {
+                processBtn.disabled = false;
+                processStatus.classList.add('hidden');
+            }
+        }
+
+        // PDF Processing Functions
+        async function createPDFFromText(text) {
+            const pdfDoc = await PDFLib.PDFDocument.create();
+            const page = pdfDoc.addPage();
+            const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+            
+            const { width, height } = page.getSize();
+            const fontSize = 12;
+            const lines = text.split('\n');
+            let yPosition = height - 50;
+
+            lines.forEach((line) => {
+                page.drawText(line, {
+                    x: 50,
+                    y: yPosition,
+                    size: fontSize,
+                    font: font,
+                    color: PDFLib.rgb(0, 0, 0),
+                });
+                yPosition -= fontSize + 5;
+            });
+
+            const pdfBytes = await pdfDoc.save();
+            saveAs(new Blob([pdfBytes], { type: 'application/pdf' }), 'text-to-pdf.pdf');
+        }
+
+        async function mergePDFs(files) {
+            const mergedPdf = await PDFLib.PDFDocument.create();
+
+            for (const file of files) {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
+                const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                copiedPages.forEach((page) => mergedPdf.addPage(page));
+            }
+
+            const pdfBytes = await mergedPdf.save();
+            saveAs(new Blob([pdfBytes], { type: 'application/pdf' }), 'merged.pdf');
+        }
+
+        async function convertImagesToPDF(images) {
+            const pdfDoc = await PDFLib.PDFDocument.create();
+
+            for (const imageFile of images) {
+                const arrayBuffer = await imageFile.arrayBuffer();
+                let image;
+                
+                if (imageFile.type === 'image/jpeg' || imageFile.type === 'image/jpg') {
+                    image = await pdfDoc.embedJpg(arrayBuffer);
+                } else if (imageFile.type === 'image/png') {
+                    image = await pdfDoc.embedPng(arrayBuffer);
+                } else {
+                    continue;
+                }
+
+                const page = pdfDoc.addPage();
+                const { width, height } = page.getSize();
+                
+                const imageWidth = image.width;
+                const imageHeight = image.height;
+                const ratio = Math.min(width / imageWidth, height / imageHeight);
+                
+                const scaledWidth = imageWidth * ratio;
+                const scaledHeight = imageHeight * ratio;
+                
+                const x = (width - scaledWidth) / 2;
+                const y = (height - scaledHeight) / 2;
+                
+                page.drawImage(image, {
+                    x, y,
+                    width: scaledWidth,
+                    height: scaledHeight,
+                });
+            }
+
+            const pdfBytes = await pdfDoc.save();
+            saveAs(new Blob([pdfBytes], { type: 'application/pdf' }), 'images-to-pdf.pdf');
+        }
+
+        async function rotatePDF(file, angle) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+            const pages = pdfDoc.getPages();
+
+            pages.forEach((page) => {
+                page.setRotation(PDFLib.degrees(angle));
+            });
+
+            const pdfBytes = await pdfDoc.save();
+            saveAs(new Blob([pdfBytes], { type: 'application/pdf' }), 'rotated.pdf');
+        }
+
+        async function simulateConversion() {
+            // Simulate processing for demo tools
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            const blob = new Blob(['Demo converted file'], { type: 'application/octet-stream' });
+            saveAs(blob, 'converted-file.pdf');
+        }
+    </script>
+</body>
+</html>

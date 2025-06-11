@@ -1,5 +1,4 @@
-
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument, rgb, PageSizes, degrees } from 'pdf-lib';
 import { saveAs } from 'file-saver';
 
 export class PDFUtils {
@@ -72,17 +71,18 @@ export class PDFUtils {
     }
   }
 
-  static async rotatePDF(file: File, rotation: number, filename: string = 'rotated.pdf') {
-    const pdfBytes = await file.arrayBuffer();
-    const pdfDoc = await PDFDocument.load(pdfBytes);
+  static async rotatePDF(file: File, rotationAngle: number, filename: string = 'rotated.pdf') {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdfDoc = await PDFDocument.load(arrayBuffer);
+    
     const pages = pdfDoc.getPages();
-
-    pages.forEach(page => {
-      page.setRotation({ angle: rotation });
+    
+    pages.forEach((page) => {
+      page.setRotation(degrees(rotationAngle));
     });
-
-    const rotatedPdfBytes = await pdfDoc.save();
-    const blob = new Blob([rotatedPdfBytes], { type: 'application/pdf' });
+    
+    const pdfBytes = await pdfDoc.save();
+    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     saveAs(blob, filename);
   }
 
